@@ -1,0 +1,46 @@
+!A-Z
+keycode 38 = a A a A Greek_alpha U2200 a A
+keycode 56 = b B b B Greek_beta U0305 b B
+keycode 54 = c C c C Greek_chi U2102
+keycode 40 = d D d D Greek_delta Greek_DELTA d D
+keycode 26 = e E EuroSign Greek_epsilon Greek_epsilon U2203
+keycode 41 = f F f F Greek_phi Greek_PHI f F
+keycode 42 = g G g G Greek_gamma Greek_GAMMA g G
+keycode 43 = h H h H U2665 U0302
+keycode 31 = i I i I leftarrow rightarrow
+keycode 44 = j J j J U25E1 U203F
+keycode 45 = k K k K Greek_kappa U1D16
+keycode 46 = l L l L Greek_lamda Greek_LAMDA l L
+keycode 57 = n N n N Greek_nu U2115 n N
+keycode 32 = o O o O U21A6 U21B2
+keycode 33 = p P p P Greek_pi Greek_PI p P
+keycode 24 = q Q q Q at U211A
+keycode 27 = r R r R Greek_rho U211D r R
+keycode 39 = s S s S Greek_sigma Greek_SIGMA s S
+keycode 28 = t T t T Greek_theta Greek_THETA t T
+keycode 30 = u U u U uparrow downarrow
+keycode 55 = v V v V Greek_psi Greek_PSI
+keycode 25 = w W w W Greek_omega Greek_OMEGA w W
+keycode 53 = x X x X Greek_xi Greek_XI x X
+keycode 52 = y Y z Z Greek_upsilon Greek_UPSILON
+keycode 29 = z Z y Y Greek_zeta U2124
+!Numbers
+keycode 11 = 2 quotedbl 2 quotedbl twosuperior U221A
+keycode 13 = 4 dollar 4 dollar U2208 U2209
+keycode 14 = 5 percent 5 percent U2248 U2261
+keycode 15 = 6 ampersand 6 ampersand U211C U2111
+keycode 19 = 0 equal 0 parenright braceright U2260
+keycode 21 = dead_acute dead_grave equal plus integral infinity
+!Special
+keycode 34 = udiaeresis Udiaeresis bracketleft braceleft implies ifonlyif
+keycode 47 = odiaeresis Odiaeresis semicolon colon logicaland logicalor
+keycode 48 = adiaeresis Adiaeresis apostrophe quotedbl union intersection
+keycode 49 = dead_circumflex degree grave asciitilde notsign U2310
+keycode 51 = numbersign apostrophe backslash bar U2286 U2287
+keycode 66 = bar brokenbar VoidSymbol NoSymbol VoidSymbol
+keycode 94 = less greater less greater U2264 U2265 bar brokenbar less greater bar brokenbar
+!Lenovo
+keycode 107 = Menu Menu Menu Menu Insert Insert
+keycode 99 = Menu Menu Menu Menu Insert Insert
+keycode 115 = Print Sys_Req Print Sys_Req Print Sys_Req Print Sys_Req
+keycode 118 = End NoSymbol End NoSymbol End End

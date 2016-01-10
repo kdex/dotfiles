@@ -1,0 +1,4 @@
+set const
+set smooth
+set nowrap
+include ~/.nano/syntax/ALL.nanorc
