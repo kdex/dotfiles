@@ -1,0 +1,39 @@
+#!/bin/bash
+set -e
+SSH_HOST="web"
+SSH_SHARED_DIRECTORY="/www/kdex.de/www/share"
+SSH_DEFAULT_DIRECTORY="pub"
+DOMAIN="kdex.de"
+FILENAME="$1"
+SAVE_AS="$FILENAME"
+SHARED_WITH="$2"
+if [[ "$SHARED_WITH" == "" ]]; then
+	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
+fi
+if [[ "$SAVE_AS" == "" ]]; then
+	SAVE_AS="$(date +%s%3N).txt"
+fi
+if [[ -t 0 ]]; then
+	# stdin is empty, so we're uploading a file
+	if [[ "$FILENAME" == "" ]]; then
+		echo "Usage: $0 <FILENAME> <WHO>"
+		exit
+	else
+		# We have entire files, so we can use rsync
+		ssh "$SSH_HOST" mkdir -p "$SSH_SHARED_DIRECTORY/$SHARED_WITH"
+		rsync -Patzl --info=progress2 $FILENAME "$SSH_HOST:$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS"
+	fi
+else
+	# stdin has content, so user pipes input to us. We can't use rsync, let's just use pv/ssh
+	echo "$(cat)" | pv | ssh "$SSH_HOST" "cat > "$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS""
+fi
+if [[ $DISPLAY != "" ]]; then
+	if hash notify-send 2>/dev/null; then
+		notify-send "Upload successful" "\"$SAVE_AS\" has been uploaded successfully." --icon=dialog-information
+	fi
+	if hash xclip 2>/dev/null; then
+		printf "https://$DOMAIN/$SHARED_WITH/$SAVE_AS" | xclip -selection c
+	fi
+else
+	echo "Upload successful: https://$DOMAIN/$SHARED_WITH/$SAVE_AS"
+fi

@@ -1,4 +1,5 @@
 set const
 set smooth
 set nowrap
+set nonewlines
 include ~/.nano/syntax/ALL.nanorc

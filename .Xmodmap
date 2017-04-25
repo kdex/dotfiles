@@ -11,6 +11,7 @@ keycode 31 = i I i I leftarrow rightarrow
 keycode 44 = j J j J U25E1 U203F
 keycode 45 = k K k K Greek_kappa U1D16
 keycode 46 = l L l L Greek_lamda Greek_LAMDA l L
+keycode 58 = m M m M mu U1F644 m M
 keycode 57 = n N n N Greek_nu U2115 n N
 keycode 32 = o O o O U21A6 U21B2
 keycode 33 = p P p P Greek_pi Greek_PI p P
@@ -40,7 +41,9 @@ keycode 51 = numbersign apostrophe backslash bar U2286 U2287
 keycode 66 = bar brokenbar VoidSymbol NoSymbol VoidSymbol
 keycode 94 = less greater less greater U2264 U2265 bar brokenbar less greater bar brokenbar
 !Lenovo
-keycode 107 = Menu Menu Menu Menu Insert Insert
-keycode 99 = Menu Menu Menu Menu Insert Insert
-keycode 115 = Print Sys_Req Print Sys_Req Print Sys_Req Print Sys_Req
-keycode 118 = End NoSymbol End NoSymbol End End
+! keycode 107 = Menu Menu Menu Menu Insert Insert
+! keycode 99 = Menu Menu Menu Menu Insert Insert
+! keycode 115 = Print Sys_Req Print Sys_Req Print Sys_Req Print Sys_Req
+! keycode 118 = End NoSymbol End NoSymbol End End
+!ASUS
+keycode 115 = End NoSymbol End NoSymbol End End
