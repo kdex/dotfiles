@@ -1,11 +1,13 @@
 #!/bin/bash
+# Dependencies: ssh, rsync, pv
+# Optional dependencies: xclip, notify-send
 set -e
 SSH_HOST="web"
 SSH_SHARED_DIRECTORY="/www/kdex.de/www/share"
 SSH_DEFAULT_DIRECTORY="pub"
 DOMAIN="kdex.de"
 FILENAME="$1"
-SAVE_AS="$FILENAME"
+SAVE_AS="$(basename $FILENAME)"
 SHARED_WITH="$2"
 if [[ "$SHARED_WITH" == "" ]]; then
 	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
@@ -21,7 +23,7 @@ if [[ -t 0 ]]; then
 	else
 		# We have entire files, so we can use rsync
 		ssh "$SSH_HOST" mkdir -p "$SSH_SHARED_DIRECTORY/$SHARED_WITH"
-		rsync -Patzl --info=progress2 $FILENAME "$SSH_HOST:$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS"
+		rsync -Patzl --info=progress2 "$FILENAME" "$SSH_HOST:$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS"
 	fi
 else
 	# stdin has content, so user pipes input to us. We can't use rsync, let's just use pv/ssh
