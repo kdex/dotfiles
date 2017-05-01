@@ -7,19 +7,21 @@ SSH_SHARED_DIRECTORY="/www/kdex.de/www/share"
 SSH_DEFAULT_DIRECTORY="pub"
 DOMAIN="kdex.de"
 FILENAME="$1"
-SAVE_AS="$(basename $FILENAME)"
+SAVE_AS="$FILENAME"
 SHARED_WITH="$2"
 if [[ "$SHARED_WITH" == "" ]]; then
 	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
 fi
 if [[ "$SAVE_AS" == "" ]]; then
 	SAVE_AS="$(date +%s%3N).txt"
+else
+	SAVE_AS="$(basename "$SAVE_AS")"
 fi
 if [[ -t 0 ]]; then
 	# stdin is empty, so we're uploading a file
 	if [[ "$FILENAME" == "" ]]; then
-		echo "Usage: $0 <FILENAME> <WHO>"
-		exit
+		echo "Usage: $(basename "$0") <FILENAME> <WHO>"
+		exit 1
 	else
 		# We have entire files, so we can use rsync
 		ssh "$SSH_HOST" mkdir -p "$SSH_SHARED_DIRECTORY/$SHARED_WITH"
