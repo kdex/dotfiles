@@ -19,7 +19,7 @@ cd /tmp/nanorc && make install && cd "$REPOSITORY"
 cp .nanorc ~/
 rm -rf /tmp/nanorc
 # Setup KDE
-cp -aT .config/* ~/.config
+cp -aT .config/. ~/.config
 # Copy scripts
 for binary in .bin/*; do
 	cp "$binary" ~/.local/bin
