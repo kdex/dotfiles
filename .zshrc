@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/kdex/.oh-my-zsh
+  export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -104,7 +104,7 @@ alias TERM=xterm-256color
 
 # tabtab source for yarn package
 # uninstall by removing these lines or running `tabtab uninstall yarn`
-[[ -f /home/kdex/.npm-global/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.zsh ]] && . /home/kdex/.npm-global/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.zsh
+[[ -f $HOME/.npm-global/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.zsh ]] && . $HOME/.npm-global/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.zsh
 
 stty icrnl
 
