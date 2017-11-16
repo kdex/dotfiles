@@ -1,0 +1,22 @@
+#!/bin/bash
+# Dependencies: openssh, rsync, pv
+# Optional dependencies: coreutils, xclip, libnotify
+DIR="$(dirname $(readlink -f $0))"
+source "$DIR/../bin-deps/share-mechanism"
+SAVE_AS="$FILENAME"
+if [[ -z "$SAVE_AS" ]]; then
+	SAVE_AS="$(date +%s%3N).txt"
+else
+	SAVE_AS="$(basename "$SAVE_AS")"
+fi
+if [[ -t 0 ]]; then
+	# stdin is empty, so we're uploading a file
+	checkFilename
+	# We have entire files, so we can use rsync
+	ssh "$SSH_HOST" mkdir -p "$SSH_SHARED_DIRECTORY/$SHARED_WITH"
+	rsync -sPatzl --info=progress2 "$FILENAME" "$SSH_HOST:$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS"
+else
+	# stdin has content, so user pipes input to us. We can't use rsync, let's just use pv/ssh
+	echo "$(cat)" | pv | ssh "$SSH_HOST" "cat > "$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS""
+fi
+showSuccess "$SAVE_AS" UPLOAD

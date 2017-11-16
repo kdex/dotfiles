@@ -1,0 +1,14 @@
+#!/bin/bash
+# Dependencies: openssh, rsync
+# Optional dependencies: coreutils, libnotify
+DIR="$(dirname $(readlink -f $0))"
+source "$DIR/../bin-deps/share-mechanism"
+checkFilename
+FILE="$SSH_SHARED_DIRECTORY/$SHARED_WITH/$FILENAME"
+if ssh "$SSH_HOST" "[[ -f \"$FILE\" ]]"; then
+	ssh "$SSH_HOST" "rm -rf \"$FILE\""
+	showSuccess "$FILENAME" REVOKE
+else
+	showFail "$FILENAME" REVOKE
+	exit $REVOCATION_FILE_NOT_FOUND
+fi

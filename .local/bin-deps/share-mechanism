@@ -1,0 +1,79 @@
+#!/bin/bash
+set -e
+WRONG_ARGUMENTS=1
+REVOCATION_FILE_NOT_FOUND=2
+SSH_HOST="web"
+SSH_SHARED_DIRECTORY="/www/kdex.de/www/share"
+SSH_DEFAULT_DIRECTORY="pub"
+DOMAIN="kdex.de"
+FILENAME="$1"
+SHARED_WITH="$2"
+if [[ -z "$SHARED_WITH" ]]; then
+	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
+fi
+function try {
+	local COMMAND=$1
+	if hash $COMMAND 2>/dev/null; then
+		$COMMAND "${@:2}"
+	fi
+}
+function getSuccessStatus {
+	local SYMBOL=$2
+	if [[ $SYMBOL == REVOKE ]]; then
+		echo "Revocation successful"
+	elif [[ $SYMBOL == UPLOAD ]]; then
+		echo "Upload successful"
+	fi
+}
+function getFailStatus {
+	local SYMBOL=$2
+	if [[ $SYMBOL == REVOKE ]]; then
+		echo "Revocation failed"
+	elif [[ $SYMBOL == UPLOAD ]]; then
+		echo "Upload failed"
+	fi
+}
+function getSuccessMessage {
+	local FILE="$1"
+	local SYMBOL=$2
+	if [[ $SYMBOL == REVOKE ]]; then
+		echo "Access to \"$FILE\" has been revoked successfully."
+	elif [[ $SYMBOL == UPLOAD ]]; then
+		echo "\"$FILE\" has been uploaded successfully."
+	fi
+}
+function getFailMessage {
+	local FILE="$1"
+	local SYMBOL=$2
+	if [[ $SYMBOL == REVOKE ]]; then
+		echo "\"$FILE\" does not exist."
+	elif [[ $SYMBOL == "UPLOAD" ]]; then
+		echo "Error uploading \"$FILE\"."
+	fi
+}
+function showSuccess {
+	local FILE="$1"
+	local SYMBOL=$2
+	local URL="https://$DOMAIN/$SHARED_WITH/$FILE"
+	if [[ ! -z $DISPLAY ]]; then
+		try notify-send "$(getSuccessStatus "$@")" "$(getSuccessMessage "$@")" --icon=state-ok
+		if [[ $SYMBOL == UPLOAD ]]; then
+			try printf "$URL" | xclip -selection c
+		fi
+	else
+		echo "$(getSuccessStatus "$@"): "$URL""
+	fi
+}
+function showFail {
+	if [[ ! -z $DISPLAY ]]; then
+		try notify-send "$(getFailStatus "$@")" "$(getFailMessage "$@")" --icon=state-error
+	else
+		echo "$(getFailStatus "$@")"
+	fi
+}
+function checkFilename {
+	if [[ -z "$FILENAME" ]]; then
+		echo "Usage: $(basename "$0") <FILENAME> [WHO]"
+		exit $WRONG_ARGUMENTS
+	fi
+}
