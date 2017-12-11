@@ -2,7 +2,7 @@
 set -e
 WRONG_ARGUMENTS=1
 REVOCATION_FILE_NOT_FOUND=2
-SSH_HOST="web"
+SSH_HOST="pichu"
 SSH_SHARED_DIRECTORY="/www/kdex.de/www/share"
 SSH_DEFAULT_DIRECTORY="pub"
 DOMAIN="kdex.de"
