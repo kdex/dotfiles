@@ -101,13 +101,13 @@ function checkFilename {
 		exit $WRONG_ARGUMENTS
 	fi
 }
-if [[ ! -f "$UPLOAD_RC" ]]; then
-	setTransferMode
-fi
-TRANSFER_MODE="$(cat $UPLOAD_RC)"
 for dependency in "${DEPENDENCIES[@]}"; do
 	command -v $dependency >/dev/null 2>&1 || {
 		err "Error running $(basename $0): The $dependency command is not installed."
 		exit $MISSING_DEPENDENCIES
 	}
 done
+if [[ ! -f "$UPLOAD_RC" ]]; then
+	setTransferMode
+fi
+TRANSFER_MODE="$(cat $UPLOAD_RC)"
