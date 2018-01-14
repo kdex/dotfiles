@@ -1,5 +1,5 @@
 #!/bin/bash
-# Dependencies: openssh, rsync, pv
+# Dependencies: openssh, rsync, pv, lftp
 # Optional dependencies: coreutils, xclip, libnotify
 DIR="$(dirname $(readlink -f $0))"
 source "$DIR/../bin-deps/share-mechanism"
@@ -9,14 +9,43 @@ if [[ -z "$SAVE_AS" ]]; then
 else
 	SAVE_AS="$(basename "$SAVE_AS")"
 fi
-if [[ -t 0 ]]; then
+TARGET_DIRECTORY="$SSH_SHARED_DIRECTORY/$SHARED_WITH"
+function uploadRegularFile {
 	# stdin is empty, so we're uploading a file
 	checkFilename
+	stat "$FILENAME" >/dev/null
 	# We have entire files, so we can use rsync
-	ssh "$SSH_HOST" mkdir -p "$SSH_SHARED_DIRECTORY/$SHARED_WITH"
-	rsync -sPatzl --info=progress2 "$FILENAME" "$SSH_HOST:$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS"
+	if [[ $TRANSFER_MODE == "ssh" ]]; then
+		APPEND=""
+		if [[ -d "$FILENAME" ]]; then
+			# prevent rsync from creating a directory of the same name within the destination
+			APPEND="/"
+		fi
+		rsync --rsync-path="mkdir -p \"$TARGET_DIRECTORY\" && rsync" -sPAzaX --info=progress2 "$FILENAME$APPEND" "$SSH_HOST:$TARGET_DIRECTORY/$SAVE_AS"
+	elif [[ $TRANSFER_MODE == "sftp" ]]; then
+		COMMAND_LIST="open sftp://$SSH_HOST;"
+		COMMAND_LIST+="mkdir -pf \"$TARGET_DIRECTORY\";"
+		COMMAND_LIST+="cd \"$TARGET_DIRECTORY\";"
+		if [[ -d "$FILENAME" ]]; then
+			COMMAND_LIST+="mirror -RPc --only-newer \"$FILENAME\";"
+		else
+			COMMAND_LIST+="put -c \"$FILENAME\";"
+		fi
+		lftp -c "$COMMAND_LIST"
+	fi
+}
+function uploadStandardInput {
+	# stdin has content, so user is piping input to us
+	if [[ $TRANSFER_MODE == "ssh" ]]; then
+		# We can't use rsync, let's just use pv/ssh
+		echo "$(cat)" | pv | ssh "$SSH_HOST" "cat > "$TARGET_DIRECTORY/$SAVE_AS""
+	elif [[ $TRANSFER_MODE == "sftp" ]]; then
+		pv - | lftp -c "open sftp://$SSH_HOST; put /dev/stdin -o "$TARGET_DIRECTORY/$SAVE_AS"" > /dev/null
+	fi
+}
+if [[ -t 0 ]]; then
+	uploadRegularFile
 else
-	# stdin has content, so user pipes input to us. We can't use rsync, let's just use pv/ssh
-	echo "$(cat)" | pv | ssh "$SSH_HOST" "cat > "$SSH_SHARED_DIRECTORY/$SHARED_WITH/$SAVE_AS""
+	uploadStandardInput
 fi
 showSuccess "$SAVE_AS" UPLOAD

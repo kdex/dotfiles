@@ -2,15 +2,39 @@
 set -e
 WRONG_ARGUMENTS=1
 REVOCATION_FILE_NOT_FOUND=2
-SSH_HOST="pichu"
-SSH_SHARED_DIRECTORY="/www/kdex.de/www/share"
+MISSING_DEPENDENCIES=3
+SSH_HOST="kdex.de"
+SSH_SHARED_DIRECTORY="/web/kdex.de/www/share"
 SSH_DEFAULT_DIRECTORY="pub"
-DOMAIN="kdex.de"
+DOMAIN="$SSH_HOST"
 FILENAME="$1"
 SHARED_WITH="$2"
+UPLOAD_RC="$HOME/.config/uploadrc"
+DEPENDENCIES=(ssh rsync pv lftp)
 if [[ -z "$SHARED_WITH" ]]; then
 	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
 fi
+function err {
+	>&2 echo $@
+}
+function setTransferMode {
+	# A user might access the server via ssh or sftp. Let's determine and cache this transfer mode for future use.
+	ssh "$SSH_HOST" exit > /dev/null 2>&1
+	if [[ $? == 0 ]]; then
+		# We can use ssh.
+		echo "ssh" > "$UPLOAD_RC"
+	else
+		# Let's try lftp.
+		lftp -c "open sftp://$SSH_HOST; bye" > /dev/null 2>&1
+		if [[ $? == 0 ]]; then
+			# We can use sftp.
+			echo "sftp" > "$UPLOAD_RC"
+		else
+			err "Unable to determine transfer mode: Please check your ssh/sftp settings."
+			exit 1
+		fi
+	fi
+}
 function try {
 	local COMMAND=$1
 	if hash $COMMAND 2>/dev/null; then
@@ -61,19 +85,29 @@ function showSuccess {
 			try printf "$URL" | xclip -selection c
 		fi
 	else
-		echo "$(getSuccessStatus "$@"): "$URL""
+		err "$(getSuccessStatus "$@"): "$URL""
 	fi
 }
 function showFail {
 	if [[ ! -z $DISPLAY ]]; then
 		try notify-send "$(getFailStatus "$@")" "$(getFailMessage "$@")" --icon=state-error
 	else
-		echo "$(getFailStatus "$@")"
+		err "$(getFailStatus "$@")"
 	fi
 }
 function checkFilename {
 	if [[ -z "$FILENAME" ]]; then
-		echo "Usage: $(basename "$0") <FILENAME> [WHO]"
+		err "Usage: $(basename "$0") <FILENAME> [WHO]"
 		exit $WRONG_ARGUMENTS
 	fi
 }
+if [[ ! -f "$UPLOAD_RC" ]]; then
+	setTransferMode
+fi
+TRANSFER_MODE="$(cat $UPLOAD_RC)"
+for dependency in "${DEPENDENCIES[@]}"; do
+	command -v $dependency >/dev/null 2>&1 || {
+		err "Error running $(basename $0): The $dependency command is not installed."
+		exit $MISSING_DEPENDENCIES
+	}
+done

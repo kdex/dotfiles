@@ -1,12 +1,27 @@
 #!/bin/bash
-# Dependencies: openssh, rsync
+# Dependencies: openssh, lftp
 # Optional dependencies: coreutils, libnotify
 DIR="$(dirname $(readlink -f $0))"
 source "$DIR/../bin-deps/share-mechanism"
 checkFilename
 FILE="$SSH_SHARED_DIRECTORY/$SHARED_WITH/$FILENAME"
-if ssh "$SSH_HOST" "[[ -f \"$FILE\" ]]"; then
-	ssh "$SSH_HOST" "rm -rf \"$FILE\""
+function fileExists {
+	if [[ $TRANSFER_MODE == "ssh" ]]; then
+		ssh "$SSH_HOST" "du \"$FILE\"" > /dev/null 2>&1
+	elif [[ $TRANSFER_MODE == "sftp" ]]; then
+		lftp -c "open sftp://$SSH_HOST; du \"$FILE\"" > /dev/null 2>&1
+	fi
+	echo $?
+}
+function deleteFile {
+	if [[ $TRANSFER_MODE == "ssh" ]]; then
+		ssh "$SSH_HOST" "rm -rf \"$FILE\""
+	elif [[ $TRANSFER_MODE == "sftp" ]]; then
+		lftp -c "open sftp://$SSH_HOST; rm -rf \"$FILE\""
+	fi
+}
+if [[ $(fileExists) == 0 ]]; then
+	deleteFile
 	showSuccess "$FILENAME" REVOKE
 else
 	showFail "$FILENAME" REVOKE
