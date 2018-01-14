@@ -18,8 +18,11 @@ function err {
 	>&2 echo $@
 }
 function setTransferMode {
+	# We rely on the `ssh` command exiting with an arbitrary exit code
 	# A user might access the server via ssh or sftp. Let's determine and cache this transfer mode for future use.
+	set +e
 	ssh "$SSH_HOST" exit > /dev/null 2>&1
+	set -e
 	if [[ $? == 0 ]]; then
 		# We can use ssh.
 		echo "ssh" > "$UPLOAD_RC"
