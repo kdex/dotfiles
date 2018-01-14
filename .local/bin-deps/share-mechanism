@@ -3,13 +3,12 @@ set -e
 WRONG_ARGUMENTS=1
 REVOCATION_FILE_NOT_FOUND=2
 MISSING_DEPENDENCIES=3
-SSH_HOST="kdex.de"
-SSH_SHARED_DIRECTORY="/web/$SSH_HOST/www/share"
-SSH_DEFAULT_DIRECTORY="pub"
-DOMAIN="$SSH_HOST"
+MISSING_CONFIGURATION=4
+CONFIGURATION_DIRECTORY="$HOME/.config/upload"
+UPLOAD_RC="$CONFIGURATION_DIRECTORY/uploadrc"
+CACHED_TRANSFER_MODE="$CONFIGURATION_DIRECTORY/upload.transfer-mode"
 FILENAME="$1"
 SHARED_WITH="$2"
-UPLOAD_RC="$HOME/.config/uploadrc"
 DEPENDENCIES=(ssh rsync pv lftp)
 if [[ -z "$SHARED_WITH" ]]; then
 	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
@@ -24,13 +23,13 @@ function setTransferMode {
 	ssh "$SSH_HOST" exit > /dev/null 2>&1
 	if [[ $? == 0 ]]; then
 		# We can use ssh.
-		echo "ssh" > "$UPLOAD_RC"
+		echo "ssh" > "$CACHED_TRANSFER_MODE"
 	else
 		# Let's try lftp.
 		lftp -c "open sftp://$SSH_HOST; bye" > /dev/null 2>&1
 		if [[ $? == 0 ]]; then
 			# We can use sftp.
-			echo "sftp" > "$UPLOAD_RC"
+			echo "sftp" > "$CACHED_TRANSFER_MODE"
 		else
 			err "Unable to determine transfer mode: Please check your ssh/sftp settings."
 			exit 1
@@ -110,7 +109,19 @@ for dependency in "${DEPENDENCIES[@]}"; do
 		exit $MISSING_DEPENDENCIES
 	}
 done
-if [[ ! -f "$UPLOAD_RC" ]]; then
+mkdir -p "$CONFIGURATION_DIRECTORY" > /dev/null 2>&1
+if [[ -f "$UPLOAD_RC" ]]; then
+	source $UPLOAD_RC
+fi
+# Check rc variables
+RC_VARIABLES=(SSH_HOST SSH_SHARED_DIRECTORY SSH_DEFAULT_DIRECTORY DOMAIN)
+for v in ${RC_VARIABLES[@]}; do
+	if [[ -z "${!v}" ]]; then
+		err "\$${v} is unset. Please set this variable in $UPLOAD_RC."
+		exit $MISSING_CONFIGURATION
+	fi
+done
+if [[ ! -f "$CACHED_TRANSFER_MODE" ]]; then
 	setTransferMode
 fi
-TRANSFER_MODE="$(cat $UPLOAD_RC)"
+TRANSFER_MODE="$(cat $CACHED_TRANSFER_MODE)"
