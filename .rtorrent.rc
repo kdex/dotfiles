@@ -1,0 +1,12 @@
+# Uploads per torrent
+max_uploads = 0
+# Global uploads
+max_uploads_global = 0
+# Up/down
+ratio.min.set = 0
+ratio.max.set = 0
+ratio.upload.set= 0M
+upload_rate = 1
+min_peers_seed = 0
+max_peers_seed = 0
+# http_proxy = http://127.0.0.1:9050/
