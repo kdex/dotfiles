@@ -7,6 +7,7 @@ git config --global user.name "kdex"
 git config --global user.email "kdex@kdex.de"
 git config --global core.editor "nano"
 git config --global push.default "simple"
+git config --global push.followTags true
 git config --global commit.gpgsign true
 git config --global init.templatedir "~/$DIRECTORY_GIT_TEMPLATE"
 cp -aT "$DIRECTORY_GIT_TEMPLATE" "~/$DIRECTORY_GIT_TEMPLATE"
