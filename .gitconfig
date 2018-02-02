@@ -1,0 +1,18 @@
+[alias]
+	lg = log --graph --decorate --abbrev-commit --date=relative
+[user]
+	name = kdex
+	email = kdex@kdex.de
+[core]
+	editor = nano
+[push]
+	default = simple
+	followTags = true
+[init]
+	templatedir = /home/kdex/.git-template
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg2
+[pull]
+	rebase = true
