@@ -1,5 +1,6 @@
-set const
-set smooth
+set autoindent
+set constantshow
+set morespace
 set nowrap
 set nonewlines
-include ~/.nano/syntax/ALL.nanorc
+set smooth
