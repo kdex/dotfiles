@@ -1,6 +1,8 @@
 set autoindent
 set constantshow
+set linenumbers
 set morespace
 set nowrap
 set nonewlines
 set smooth
+set softwrap
