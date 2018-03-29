@@ -102,10 +102,6 @@ zstyle ':completion:*' rehash true
 alias clipboard="xclip -selection c"
 alias TERM=xterm-256color
 
-# tabtab source for yarn package
-# uninstall by removing these lines or running `tabtab uninstall yarn`
-[[ -f $HOME/.npm-global/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.zsh ]] && . $HOME/.npm-global/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.zsh
-
 stty icrnl
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
