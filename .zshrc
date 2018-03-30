@@ -84,7 +84,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Aliases
-alias update="sudo pacman -Syu"
+alias update="pacaur -Syu"
 alias search="pacman -Ss"
 alias standby="sudo pm-suspend"
 alias grep="grep --color"
