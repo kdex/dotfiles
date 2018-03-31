@@ -99,6 +99,7 @@ export TZ=":/etc/localtime"
 setopt COMBINING_CHARS
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' rehash true
+zstyle ':completion:*' insert-tab false
 alias clipboard="xclip -selection c"
 alias TERM=xterm-256color
 
