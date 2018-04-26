@@ -10,9 +10,6 @@ CACHED_TRANSFER_MODE="$CONFIGURATION_DIRECTORY/upload.transfer-mode"
 FILENAME="$1"
 SHARED_WITH="$2"
 DEPENDENCIES=(ssh rsync pv lftp)
-if [[ -z "$SHARED_WITH" ]]; then
-	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
-fi
 function err {
 	>&2 echo $@
 }
@@ -121,6 +118,9 @@ for v in ${RC_VARIABLES[@]}; do
 		exit $MISSING_CONFIGURATION
 	fi
 done
+if [[ -z "$SHARED_WITH" ]]; then
+	SHARED_WITH="$SSH_DEFAULT_DIRECTORY"
+fi
 if [[ ! -f "$CACHED_TRANSFER_MODE" ]]; then
 	setTransferMode
 fi
