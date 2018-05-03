@@ -15,7 +15,7 @@ cd /tmp/nanorc && make install && cd "$REPOSITORY"
 cp .nanorc ~/
 rm -rf /tmp/nanorc
 # Set up .npmrc
-echo "sign-git-tag=true" >> ~/.npmrc
+cp .npmrc ~/
 # Set up KDE
 cp -aT .config/. ~/.config
 cp -aT .local ~/.local
