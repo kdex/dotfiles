@@ -6,10 +6,10 @@ export PATH="$PATH:~/bin:~/.bin:/root/.gem/ruby/2.2.0/bin:~/.gem/ruby/2.2.0/bin:
 export NVM_DIR=~/.nvm
 export PULSE_LATENCY_MSEC=30
 # Aliases
-alias update="sudo pacman -Syu"
-alias search="pacman -Ss"
+alias update="sudo yay -Syu"
+alias search="yay -Ss"
 alias standby="sudo pm-suspend"
 alias grep="grep --color"
-alias get="sudo pacman -S"
-alias remove="sudo pacman -Rs"
+alias get="sudo yay -S"
+alias remove="sudo yay -Rs"
 alias ls="ls --color"

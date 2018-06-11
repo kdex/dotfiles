@@ -84,12 +84,12 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Aliases
-alias update="pacaur -Syu"
-alias search="pacman -Ss"
+alias update="yay -Syu"
+alias search="yay -Ss"
 alias standby="sudo pm-suspend"
 alias grep="grep --color"
-alias get="sudo pacman -S"
-alias remove="sudo pacman -Rs"
+alias get="sudo yay -S"
+alias remove="sudo yay -Rs"
 alias ls="ls --color"
 export EDITOR=nano
 export PATH="$HOME/.bin:$HOME/.npm-global/bin:$HOME/.yarn/bin:$PATH:$HOME/bin:$HOME/.gem/ruby/2.2.0/bin:$HOME/.local/bin:./node_modules/.bin"
