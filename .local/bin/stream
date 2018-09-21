@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -e
+shopt -s nullglob dotglob
+URL="$1"
+STREAMER="$(basename "$URL")"
+RECORDING_DIRECTORY_NAME="streams"
+RECORDING_DIRECTORY="$(xdg-user-dir VIDEOS)/$RECORDING_DIRECTORY_NAME/$STREAMER"
+PLAYER_OPTIONS="\
+	vlc\
+		--input-record-path "$RECORDING_DIRECTORY"\
+		--file-caching 1000\
+		--network-caching 1000\
+		`#--sout file/ts/test.mpg`\
+		`#--meta-title ${STREAMER}`\
+"
+if [[ ! -d "$RECORDING_DIRECTORY" ]]; then
+	mkdir -p "$RECORDING_DIRECTORY"
+fi
+function renameVLCFiles() {
+	for FILE_PATH in "$RECORDING_DIRECTORY"/vlc-record*; do
+		renameVLCFile "$FILE_PATH"
+	done
+}
+function renameVLCFile() {
+	local FILE="$(basename "$1")"
+	local OUTPUT="$RECORDING_DIRECTORY/$FILE"
+	local YEAR="${FILE:11:4}"
+	local MONTH="${FILE:16:2}"
+	local DAY="${FILE:19:2}"
+	local H="${FILE:22:2}"
+	local MIN="${FILE:25:2}"
+	local S="${FILE:28:2}"
+	local EXTENSION="${FILE##*.}"
+	mv "$OUTPUT" "$RECORDING_DIRECTORY/$YEAR-$MONTH-$DAY-$H-$MIN-$S.$EXTENSION"
+}
+trap 'renameVLCFiles' SIGINT
+set +e
+streamlink --player "$PLAYER_OPTIONS" --hls-segment-threads 4 "$URL" ${@:2} best
+RETURN_CODE=$?
+set -e
+if [ -z "$(ls -A "$RECORDING_DIRECTORY")" ]; then
+	rm -rf "$RECORDING_DIRECTORY"
+else
+	renameVLCFiles
+fi
+exit "$RETURN_CODE"
