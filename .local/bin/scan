@@ -1,0 +1,2 @@
+#/bin/bash
+scanimage --format=png > $1
