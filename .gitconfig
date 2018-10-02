@@ -1,18 +1,38 @@
 [alias]
+	cp = cherry-pick
+	fix = !git add -u && git commit --amend --no-edit && git push --force-with-lease
 	lg = log --graph --decorate --abbrev-commit --date=relative
-[user]
-	name = kdex
-	email = kdex@kdex.de
+	ref = reflog --date=relative
+[branch]
+	autoSetupMerge = always
+	autoSetupRebase = always
+	mergeOptions = --ff-only
+[commit]
+	gpgsign = true
 [core]
 	editor = nano
+[difftool]
+	prompt = false
+[gpg]
+	program = gpg2
+[init]
+	templateDir = /home/kdex/.git-template
+[merge]
+	ff = only
+	verifySignatures = true
+[mergetool]
+	prompt = false
+	writeToTemp = true
+[pull]
+	rebase = true
 [push]
 	default = simple
 	followTags = true
-[init]
-	templatedir = /home/kdex/.git-template
-[commit]
-	gpgsign = true
-[gpg]
-	program = gpg2
-[pull]
-	rebase = true
+[pager]
+	diff = diff-so-fancy | less -RFX
+	show = diff-so-fancy | less -RFX
+[tag]
+	forceSignAnnotated = true
+[user]
+	email = kdex@kdex.de
+	name = kdex
