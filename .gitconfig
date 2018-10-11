@@ -26,7 +26,6 @@
 	templateDir = /home/kdex/.git-template
 [merge]
 	ff = only
-	verifySignatures = true
 [mergetool]
 	keepBackup = false
 	keepTemporaries = false
