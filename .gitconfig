@@ -38,8 +38,8 @@
 	default = simple
 	followTags = true
 [pager]
-	diff = diff-so-fancy | less -RFX
-	show = diff-so-fancy | less -RFX
+	diff = diff-so-fancy | less -RX
+	show = diff-so-fancy | less -RX
 [status]
 	submoduleSummary = true
 [tag]
