@@ -1,4 +1,4 @@
-!A-Z
+! A-Z
 keycode 38 = a A a A Greek_alpha U2200 a A
 keycode 56 = b B b B Greek_beta U0305 b B
 keycode 54 = c C c C Greek_chi U2102
@@ -25,14 +25,14 @@ keycode 25 = w W w W Greek_omega Greek_OMEGA w W
 keycode 53 = x X x X Greek_xi Greek_XI x X
 keycode 52 = y Y z Z Greek_upsilon Greek_UPSILON
 keycode 29 = z Z y Y Greek_zeta U2124
-!Numbers
+! Numbers
 keycode 11 = 2 quotedbl 2 quotedbl twosuperior U221A
 keycode 13 = 4 dollar 4 dollar U2208 U2209
 keycode 14 = 5 percent 5 percent U2248 U2261
 keycode 15 = 6 ampersand 6 ampersand U211C U2111
 keycode 19 = 0 equal 0 parenright braceright U2260
 keycode 21 = dead_acute dead_grave equal plus integral infinity
-!Special
+! Special
 keycode 34 = udiaeresis Udiaeresis bracketleft braceleft implies ifonlyif
 keycode 47 = odiaeresis Odiaeresis semicolon colon logicaland logicalor
 keycode 48 = adiaeresis Adiaeresis apostrophe quotedbl union intersection
@@ -40,10 +40,15 @@ keycode 49 = dead_circumflex degree grave asciitilde notsign U2310
 keycode 51 = numbersign apostrophe backslash bar U2286 U2287
 keycode 66 = bar brokenbar VoidSymbol NoSymbol VoidSymbol
 keycode 94 = less greater less greater U2264 U2265 bar brokenbar less greater bar brokenbar
-!Lenovo
-! keycode 107 = Menu Menu Menu Menu Insert Insert
+! Lenovo Yoga S1 20CD
+! keycode 107 = Menu Menu Menu Menu Menu Menu
 ! keycode 99 = Menu Menu Menu Menu Insert Insert
 ! keycode 115 = Print Sys_Req Print Sys_Req Print Sys_Req Print Sys_Req
 ! keycode 118 = End NoSymbol End NoSymbol End End
-!ASUS
-keycode 115 = End NoSymbol End NoSymbol End End
+! Lenovo X1 Carbon
+keycode 107 = Menu Menu Menu Menu Menu Menu Menu Menu
+keycode 110 = Insert Insert Insert Insert Insert Insert Insert Insert
+keycode 115 = Home Home Home Home Home Home Home Home
+keycode 118 = End End End End End End End End
+! ASUS UX31A
+! keycode 115 = End NoSymbol End NoSymbol End End

@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Path to your oh-my-zsh installation.
-  export ZSH=$HOME/.oh-my-zsh
+export ZSH=/usr/share/oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -86,10 +86,10 @@ source $ZSH/oh-my-zsh.sh
 # Aliases
 alias update="yay -Syu"
 alias search="yay -Ss"
-alias standby="sudo pm-suspend"
+alias standby="systemctl hibernate"
 alias grep="grep --color"
-alias get="sudo yay -S"
-alias remove="sudo yay -Rs"
+alias get="yay -S"
+alias remove="yay -Rs"
 alias ls="ls --color"
 export EDITOR=nano
 export PATH="$HOME/.bin:$HOME/.npm-global/bin:$HOME/.yarn/bin:$PATH:$HOME/bin:$HOME/.gem/ruby/2.2.0/bin:$HOME/.local/bin:./node_modules/.bin"
