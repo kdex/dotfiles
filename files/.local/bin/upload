@@ -10,7 +10,7 @@ else
 	SAVE_AS="$(basename "$SAVE_AS")"
 fi
 TARGET_DIRECTORY="$SSH_SHARED_DIRECTORY/$SHARED_WITH"
-function uploadRegularFile {
+uploadRegularFile() {
 	# stdin is empty, so we're uploading a file
 	checkFilename
 	stat "$FILENAME" >/dev/null
@@ -34,7 +34,7 @@ function uploadRegularFile {
 		lftp -c "$COMMAND_LIST"
 	fi
 }
-function uploadStandardInput {
+uploadStandardInput() {
 	# stdin has content, so user is piping input to us
 	if [[ $TRANSFER_MODE == "ssh" ]]; then
 		# We can't use rsync, let's just use pv/ssh

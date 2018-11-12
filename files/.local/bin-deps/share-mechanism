@@ -9,11 +9,11 @@ UPLOAD_RC="$CONFIGURATION_DIRECTORY/uploadrc"
 CACHED_TRANSFER_MODE="$CONFIGURATION_DIRECTORY/upload.transfer-mode"
 FILENAME="$1"
 SHARED_WITH="$2"
-DEPENDENCIES=(ssh rsync pv lftp)
-function err {
+DEPENDENCIES=(ssh rsync pv)
+err() {
 	>&2 echo $@
 }
-function setTransferMode {
+setTransferMode() {
 	# We rely on the `ssh` command exiting with an arbitrary exit code
 	# A user might access the server via ssh or sftp. Let's determine and cache this transfer mode for future use.
 	set +e
@@ -23,24 +23,25 @@ function setTransferMode {
 		echo "ssh" > "$CACHED_TRANSFER_MODE"
 	else
 		# Let's try lftp.
+		checkDependency lftp
 		lftp -c "open sftp://$SSH_HOST; bye" > /dev/null 2>&1
 		if [[ $? == 0 ]]; then
 			# We can use sftp.
 			echo "sftp" > "$CACHED_TRANSFER_MODE"
 		else
 			err "Unable to determine transfer mode: Please check your ssh/sftp settings."
-			exit 1
+			exit $MISSING_CONFIGURATION
 		fi
 	fi
 	set -e
 }
-function try {
+try() {
 	local COMMAND=$1
 	if hash $COMMAND 2>/dev/null; then
 		$COMMAND "${@:2}"
 	fi
 }
-function getSuccessStatus {
+getSuccessStatus() {
 	local SYMBOL=$2
 	if [[ $SYMBOL == REVOKE ]]; then
 		echo "Revocation successful"
@@ -48,7 +49,7 @@ function getSuccessStatus {
 		echo "Upload successful"
 	fi
 }
-function getFailStatus {
+getFailStatus() {
 	local SYMBOL=$2
 	if [[ $SYMBOL == REVOKE ]]; then
 		echo "Revocation failed"
@@ -56,7 +57,7 @@ function getFailStatus {
 		echo "Upload failed"
 	fi
 }
-function getSuccessMessage {
+getSuccessMessage() {
 	local FILE="$1"
 	local SYMBOL=$2
 	if [[ $SYMBOL == REVOKE ]]; then
@@ -65,7 +66,7 @@ function getSuccessMessage {
 		echo "\"$FILE\" has been uploaded successfully."
 	fi
 }
-function getFailMessage {
+getFailMessage() {
 	local FILE="$1"
 	local SYMBOL=$2
 	if [[ $SYMBOL == REVOKE ]]; then
@@ -74,37 +75,41 @@ function getFailMessage {
 		echo "Error uploading \"$FILE\"."
 	fi
 }
-function showSuccess {
+showSuccess() {
 	local FILE="$1"
 	local SYMBOL=$2
 	local URL="https://$DOMAIN/$SHARED_WITH/$FILE"
 	if [[ ! -z $DISPLAY ]]; then
 		try notify-send "$(getSuccessStatus "$@")" "$(getSuccessMessage "$@")" --icon=state-ok
 		if [[ $SYMBOL == UPLOAD ]]; then
-			try printf "$URL" | xclip -selection c
+			try printf "$URL" | try xclip -selection c
 		fi
 	else
 		err "$(getSuccessStatus "$@"): "$URL""
 	fi
 }
-function showFail {
+showFail() {
 	if [[ ! -z $DISPLAY ]]; then
 		try notify-send "$(getFailStatus "$@")" "$(getFailMessage "$@")" --icon=state-error
 	else
 		err "$(getFailStatus "$@")"
 	fi
 }
-function checkFilename {
+checkFilename() {
 	if [[ -z "$FILENAME" ]]; then
 		err "Usage: $(basename "$0") <FILENAME> [WHO]"
 		exit $WRONG_ARGUMENTS
 	fi
 }
-for dependency in "${DEPENDENCIES[@]}"; do
-	command -v $dependency >/dev/null 2>&1 || {
-		err "Error running $(basename $0): The $dependency command is not installed."
+checkDependency() {
+	local DEPENDENCY="$1"
+	command -v $DEPENDENCY > /dev/null 2>%1 || {
+		err "Error running $(basename $0): The "$DEPENDENCY" command is not installed."
 		exit $MISSING_DEPENDENCIES
 	}
+}
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+	checkDependency "$DEPENDENCY"
 done
 mkdir -p "$CONFIGURATION_DIRECTORY" > /dev/null 2>&1
 if [[ -f "$UPLOAD_RC" ]]; then

@@ -5,7 +5,7 @@ DIR="$(dirname $(readlink -f $0))"
 source "$DIR/../bin-deps/share-mechanism"
 checkFilename
 FILE="$SSH_SHARED_DIRECTORY/$SHARED_WITH/$FILENAME"
-function fileExists {
+fileExists() {
 	if [[ $TRANSFER_MODE == "ssh" ]]; then
 		ssh "$SSH_HOST" "du \"$FILE\"" > /dev/null 2>&1
 	elif [[ $TRANSFER_MODE == "sftp" ]]; then
@@ -13,7 +13,7 @@ function fileExists {
 	fi
 	echo $?
 }
-function deleteFile {
+deleteFile() {
 	if [[ $TRANSFER_MODE == "ssh" ]]; then
 		ssh "$SSH_HOST" "rm -rf \"$FILE\""
 	elif [[ $TRANSFER_MODE == "sftp" ]]; then
