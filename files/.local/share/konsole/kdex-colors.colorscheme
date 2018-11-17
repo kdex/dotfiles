@@ -89,7 +89,7 @@ Color=252,232,195
 Color=252,232,195
 
 [General]
-Blur=false
+Blur=true
 Description=kdex colors
 Opacity=0.7
 Wallpaper=
