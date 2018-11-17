@@ -40,10 +40,6 @@ keycode 49 = dead_circumflex degree grave asciitilde notsign U2310
 keycode 51 = numbersign apostrophe backslash bar U2286 U2287
 keycode 66 = bar brokenbar VoidSymbol NoSymbol VoidSymbol
 keycode 94 = less greater less greater U2264 U2265 bar brokenbar less greater bar brokenbar
-! Lenovo Yoga S1 20CD
-! keycode 107 = Menu Menu Menu Menu Menu Menu Menu Menu
-! keycode 115 = End End End End End End End End
-! keycode 118 = Print Print Print Print Print Print Print Print
 ! Lenovo X1 Carbon
 ! keycode 107 = Menu Menu Menu Menu Menu Menu Menu Menu
 ! keycode 110 = Insert Insert Insert Insert Insert Insert Insert Insert
