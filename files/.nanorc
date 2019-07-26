@@ -1,6 +1,7 @@
 set constantshow
 set linenumbers
 set morespace
+set multibuffer
 set nowrap
 set nonewlines
 set smooth
