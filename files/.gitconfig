@@ -11,7 +11,7 @@
 	autoSetupRebase = always
 	mergeOptions = --ff-only
 [commit]
-	gpgsign = true
+	gpgSign = true
 [core]
 	editor = nano
 [diff]
@@ -42,7 +42,7 @@
 [status]
 	submoduleSummary = true
 [tag]
-	forceSignAnnotated = true
+	gpgSign = true
 	sort = version:refname
 [user]
 	email = kdex@kdex.de
